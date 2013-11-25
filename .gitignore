@@ -1,6 +1,10 @@
+*~
+.DS_Store
+sqlnet.log
 *.log
-*.pot
+*.pid
 *.pyc
+*.pot
 local_settings.py
-http_static/*
 .vagrant
+*.sqlite3
