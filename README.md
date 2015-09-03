@@ -7,7 +7,7 @@ django-admin.py startproject _projectname_ --extension=py,pp --template=https://
 
 ## Customizations
 
-* Added top-level `static` and `http_static` directories.  Common assets used across multiple apps (e.g. jQuery, Bootstrap) can be stored in `static`.  For production serving, static assets from both the top-level static directory and all app-level static directories are collected into `http_static`.
-* Added `settings` and `requirements` directories under the project subdirectory.  Inside those directories there are settings and requirements files for each environment: local, test, qa, production. Each of these environment-specific files inherits from a common base file. 
-* Sensitive data in settings (passwords, keys) are expected to be passed to the app via environment variables.  The `settings/base.py` file contains a helper method for retrieving these values from the environment. 
-
+* For production deployments, static assets from all app-level static directories are collected into a project level `http_static` directory, which is ignored by git.
+* Added `settings` and `requirements` directories under the project subdirectory.
+* Default to using a postgres db (installed on local VM via `vagrant up`)
+* Default to including a redis cache (installed on local VM via `vagrant up`)

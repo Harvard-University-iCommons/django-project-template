@@ -1,10 +1,15 @@
-from .base import *
+# For running unit tests
+from .local import *
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '{{ project_name }}',
+    },
+}
 
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
-
-STATIC_ROOT = normpath(join(SITE_ROOT, 'http_static'))
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache'
+    },
+}
