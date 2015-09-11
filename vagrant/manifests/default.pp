@@ -125,7 +125,7 @@ package {'libpq-dev':
 
 exec {'drop-existing-project-user':
     require => Package['postgresql'],
-    command => 'psql -d postgres -c "DROP USER IF EXISTS {{ project_name }}"'
+    command => 'psql -d postgres -c "DROP USER IF EXISTS {{ project_name }}"',
     user => 'postgres',
     group -> 'postgres',
     logoutput => true,
