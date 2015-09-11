@@ -147,7 +147,7 @@ exec {'drop-project-db':
     logoutput => true,
 }
 
-exec {'drop-project-db':
+exec {'create-project-db':
     require => Exec['drop-project-db'],
     command => 'psql -d postgres -c "CREATE DATABASE {{ project_name }} WITH OWNER {{ project_name }}"',
     user => 'postgres',
