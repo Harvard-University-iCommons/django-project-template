@@ -127,7 +127,7 @@ exec {'drop-existing-project-user':
     require => Package['postgresql'],
     command => 'psql -d postgres -c "DROP USER IF EXISTS {{ project_name }}"',
     user => 'postgres',
-    group -> 'postgres',
+    group => 'postgres',
     logoutput => true,
 }
 
@@ -135,7 +135,7 @@ exec {'create-project-user':
     require => Exec['drop-existing-project-user'],
     command => 'psql -d postgres -c "CREATE USER {{ project_name }} WITH PASSWORD \'{{ project_name }}\'"',
     user => 'postgres',
-    group -> 'postgres',
+    group => 'postgres',
     logoutput => true,
 }
 
@@ -143,7 +143,7 @@ exec {'drop-project-db':
     require => Exec['create-project-user'],
     command => 'psql -d postgres -c "DROP DATABASE IF EXISTS {{ project_name }}"',
     user => 'postgres',
-    group -> 'postgres',
+    group => 'postgres',
     logoutput => true,
 }
 
@@ -151,7 +151,7 @@ exec {'drop-project-db':
     require => Exec['drop-project-db'],
     command => 'psql -d postgres -c "CREATE DATABASE {{ project_name }} WITH OWNER {{ project_name }}"',
     user => 'postgres',
-    group -> 'postgres',
+    group => 'postgres',
     logoutput => true,
 }
 
