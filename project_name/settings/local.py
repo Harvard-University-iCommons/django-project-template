@@ -1,7 +1,11 @@
 from .base import *
 from logging.config import dictConfig
 
+DEBUG = True
+
 ALLOWED_HOSTS = ['*']
+
+SECRET_KEY = 'changeme'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
