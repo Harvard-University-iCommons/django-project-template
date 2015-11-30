@@ -5,7 +5,7 @@ from logging.config import dictConfig
 SECRET_KEY = SECURE_SETTINGS['django_secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = SECURE_SETTINGS.get('enable_debug', False)
+DEBUG = SECURE_SETTINGS['enable_debug']
 
 # tlt hostnames
 ALLOWED_HOSTS = ['.tlt.harvard.edu']
