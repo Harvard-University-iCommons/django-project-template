@@ -5,7 +5,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-SECRET_KEY = 'changeme'
+SECRET_KEY = '{{ secret_key }}'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
