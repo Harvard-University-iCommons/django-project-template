@@ -3,8 +3,6 @@ from logging.config import dictConfig
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
 SECRET_KEY = '{{ secret_key }}'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
