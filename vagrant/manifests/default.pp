@@ -105,6 +105,19 @@ package {'sqlite3':
     require => Exec['apt-get-update'],
 }
 
+# ntp - prevent time drift
+package {'ntp':
+    ensure => latest,
+    require => Exec['apt-get-update'],
+}
+
+service {'ntp':
+    ensure => running,
+    enable => true,
+    hasrestart => true,
+    require => Package['ntp'],
+}
+
 # Install Postgresql
 package {'postgresql':
     ensure => latest,
