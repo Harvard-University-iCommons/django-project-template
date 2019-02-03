@@ -66,7 +66,7 @@ TEMPLATES = [
 WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
+# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -80,18 +80,18 @@ DATABASES = {
 }
 
 # Sessions
-# https://docs.djangoproject.com/en/1.9/topics/http/sessions/#module-django.contrib.sessions
+# https://docs.djangoproject.com/en/{{ docs_version }}/topics/http/sessions/#module-django.contrib.sessions
 
 # Store sessions in default cache defined below
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 # NOTE: This setting only affects the session cookie, not the expiration of the session
 # being stored in the cache.  The session keys will expire according to the value of
-# SESSION_COOKIE_AGE (https://docs.djangoproject.com/en/1.9/ref/settings/#session-cookie-age),
+# SESSION_COOKIE_AGE (https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#session-cookie-age),
 # which defaults to 2 weeks.
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Cache
-# https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-CACHES
+# https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#std:setting-CACHES
 
 REDIS_HOST = SECURE_SETTINGS.get('redis_host', '127.0.0.1')
 REDIS_PORT = SECURE_SETTINGS.get('redis_port', 6379)
@@ -105,13 +105,13 @@ CACHES = {
         },
         'KEY_PREFIX': '{{ project_name }}',  # Provide a unique value for shared cache
         # See following for default timeout (5 minutes as of 1.7):
-        # https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-CACHES-TIMEOUT
+        # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#std:setting-CACHES-TIMEOUT
         'TIMEOUT': SECURE_SETTINGS.get('default_cache_timeout_secs', 300),
     },
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.9/topics/i18n/
+# https://docs.djangoproject.com/en/{{ docs_version }}/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -120,6 +120,7 @@ TIME_ZONE = 'UTC'
 # an easy way to turn it off, for performance. If this is set to False, Django will make some
 # optimizations so as not to load the translation machinery.
 USE_I18N = False
+
 # A boolean that specifies if localized formatting of data will be enabled by default or not.
 # If this is set to True, e.g. Django will display numbers and dates using the format of the
 # current locale.  NOTE: this would only really come into play if your locale was outside of the
@@ -131,17 +132,17 @@ USE_L10N = False
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+# https://docs.djangoproject.com/en/{{ docs_version }}/howto/static-files/
 
 # This directory is being ignored by git
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'http_static'))
 STATIC_URL = '/static/'
 
 # Logging
-# https://docs.djangoproject.com/en/1.9/topics/logging/#configuring-logging
+# https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging/#configuring-logging
 
 # Turn off default Django logging
-# https://docs.djangoproject.com/en/1.9/topics/logging/#disabling-logging-configuration
+# https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging/#disabling-logging-configuration
 LOGGING_CONFIG = None
 
 _DEFAULT_LOG_LEVEL = SECURE_SETTINGS.get('log_level', logging.DEBUG)
