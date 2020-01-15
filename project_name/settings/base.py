@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 
 import os
 import logging
-from .secure import SECURE_SETTINGS
+from dj_secure_settings.loader import load_secure_settings
+
+
+SECURE_SETTINGS = load_secure_settings()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # NOTE: Since we have a settings module, we have to go one more directory up to get to
