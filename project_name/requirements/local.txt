@@ -4,6 +4,8 @@
 -r base.txt
 
 # below are requirements specific to the local environment
-django-debug-toolbar==3.2.2
-flake8==4.0.1
-django-sslserver==0.22
+django-debug-toolbar==3.8.1
+flake8==6.0.0
+django-extensions==3.2.1
+pyOpenSSL==22.1.0 # dependency for django-extensions
+Werkzeug==2.2.2 # dependency for django-extensions

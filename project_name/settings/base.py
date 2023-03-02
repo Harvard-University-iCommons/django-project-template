@@ -101,7 +101,7 @@ REDIS_PORT = SECURE_SETTINGS.get('redis_port', 6379)
 
 CACHES = {
     'default': {
-        'BACKEND': 'redis_cache.RedisCache',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT),
         'OPTIONS': {
             'PARSER_CLASS': 'redis.connection.HiredisParser'
@@ -144,12 +144,21 @@ STATIC_URL = '/static/'
 # Logging
 # https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging/#configuring-logging
 
-# Turn off default Django logging
-# https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging/#disabling-logging-configuration
-LOGGING_CONFIG = None
 
 _DEFAULT_LOG_LEVEL = SECURE_SETTINGS.get('log_level', logging.DEBUG)
 _LOG_ROOT = SECURE_SETTINGS.get('log_root', '')
+_JSON_LOG_FORMAT = '%(asctime)s %(created)f %(exc_info)s %(filename)s %(funcName)s %(levelname)s %(levelno)s %(name)s %(lineno)d %(module)s %(message)s %(pathname)s %(process)s'
+
+class ContextFilter(logging.Filter):
+    def __init__(self, **kwargs):
+        self.extra = kwargs
+
+    def filter(self, record):
+
+        for k in self.extra:
+            setattr(record, k, self.extra[k])
+
+        return True
 
 LOGGING = {
     'version': 1,
@@ -161,6 +170,10 @@ LOGGING = {
         },
         'simple': {
             'format': '%(levelname)s\t%(name)s:%(lineno)s\t%(message)s',
+        },
+        'json': {
+            '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+            'format': _JSON_LOG_FORMAT,
         },
     },
     'handlers': {
