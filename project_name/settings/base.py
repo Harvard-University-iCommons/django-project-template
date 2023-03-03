@@ -103,9 +103,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': "redis://%s:%s/0" % (REDIS_HOST, REDIS_PORT),
-        'OPTIONS': {
-            'PARSER_CLASS': 'redis.connection.HiredisParser'
-        },
         'KEY_PREFIX': '{{ project_name }}',  # Provide a unique value for shared cache
         # See following for default timeout (5 minutes as of 1.7):
         # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#std:setting-CACHES-TIMEOUT
