@@ -1,13 +1,16 @@
-import django
-from django.core.handlers.asgi import ASGIHandler
+"""
+ASGI config for {{ project_name }} project.
 
+It exposes the ASGI callable as a module-level variable named ``application``.
 
-def get_asgi_application():
-    """
-    The public interface to Django's ASGI support. Return an ASGI 3 callable.
+For more information on this file, see
+https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/asgi/
+"""
 
-    Avoids making django.core.handlers.ASGIHandler a public API, in case the
-    internal implementation changes or moves in the future.
-    """
-    django.setup(set_prefix=False)
-    return ASGIHandler()
+import os
+
+from django.core.asgi import get_asgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', '{{ project_name }}.settings')
+
+application = get_asgi_application()
