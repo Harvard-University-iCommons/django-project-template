@@ -68,7 +68,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
 
-# Database
+# DatabaseSESSION_COOKIE_SAMESITE = "None"  # should be set as 'None' for Django >= 3.1
+SESSION_COOKIE_SECURE = True  # should be True in case of HTTPS usage (production)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_COOKIE_SAMESITE = "None"  # should be set as 'None' for Django >= 3.1
+CSRF_COOKIE_SECURE = True  # should be True in case of HTTPS usage (production)
+
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
 
 DATABASES = {
