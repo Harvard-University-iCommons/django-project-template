@@ -18,7 +18,7 @@ SECURE_SETTINGS = load_secure_settings()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # NOTE: Since we have a settings module, we have to go one more directory up to get to
 # the project root
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Application definition
 
