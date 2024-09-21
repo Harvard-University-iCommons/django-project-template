@@ -6,7 +6,7 @@ redis==5.0.8
 hiredis==3.0.0
 
 git+https://github.com/Harvard-University-iCommons/django-ssm-parameter-store.git@v0.6#egg=django-ssm-parameter-store==0.6
-
+splunk_handler==3.0.0
 python-json-logger==2.0.7
 django-storages==1.14.4
 django-watchman==1.3.0

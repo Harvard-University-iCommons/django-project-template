@@ -18,7 +18,7 @@ SECURE_SETTINGS = load_secure_settings()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # NOTE: Since we have a settings module, we have to go one more directory up to get to
 # the project root
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Application definition
 
@@ -147,9 +147,9 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/{{ docs_version }}/topics/logging/#configuring-logging
 
 
-_DEFAULT_LOG_LEVEL = SECURE_SETTINGS.get('log_level', logging.DEBUG)
-_LOG_ROOT = SECURE_SETTINGS.get('log_root', '')
-_JSON_LOG_FORMAT = '%(asctime)s %(created)f %(exc_info)s %(filename)s %(funcName)s %(levelname)s %(levelno)s %(name)s %(lineno)d %(module)s %(message)s %(pathname)s %(process)s'
+_DEFAULT_LOG_LEVEL = SECURE_SETTINGS.get("log_level", logging.DEBUG)
+_JSON_LOG_FORMAT = "%(asctime)s %(created)f %(exc_info)s %(filename)s %(funcName)s %(levelname)s %(levelno)s %(name)s %(lineno)d %(module)s %(message)s %(pathname)s %(process)s"
+
 
 class ContextFilter(logging.Filter):
     def __init__(self, **kwargs):
@@ -162,51 +162,83 @@ class ContextFilter(logging.Filter):
 
         return True
 
+
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s\t%(asctime)s.%(msecs)03dZ\t%(name)s:%(lineno)s\t%(message)s',
-            'datefmt': '%Y-%m-%dT%H:%M:%S'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
+        "json": {
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": _JSON_LOG_FORMAT,
         },
-        'simple': {
-            'format': '%(levelname)s\t%(name)s:%(lineno)s\t%(message)s',
+        "simple": {"format": "%(levelname)s %(message)s"},
+    },
+    "filters": {
+        "context": {
+            "()": "ai_lti.settings.base.ContextFilter",
+            "env": SECURE_SETTINGS.get("env_name"),
+            "project": "ai_lti",
+            "department": "uw",
         },
-        'json': {
-            '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-            'format': _JSON_LOG_FORMAT,
+        "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
         },
     },
-    'handlers': {
-        # By default, log to a file
-        'default': {
-            'class': 'logging.handlers.WatchedFileHandler',
-            'level': _DEFAULT_LOG_LEVEL,
-            'formatter': 'verbose',
-            'filename': os.path.join(_LOG_ROOT, 'django-{{ project_name }}.log'),
+    "handlers": {
+        "default": {
+            "class": "splunk_handler.SplunkHandler",
+            "formatter": "json",
+            "sourcetype": "json",
+            "source": "django-ai_lti",
+            "host": "http-inputs-harvard.splunkcloud.com",
+            "port": "443",
+            "index": "soc-isites",
+            "token": SECURE_SETTINGS.get("splunk_token"),
+            "level": _DEFAULT_LOG_LEVEL,
+            "filters": ["context"],
+        },
+        "gunicorn": {
+            "class": "splunk_handler.SplunkHandler",
+            "formatter": "json",
+            "sourcetype": "json",
+            "source": "gunicorn-ai_lti",
+            "host": "http-inputs-harvard.splunkcloud.com",
+            "port": "443",
+            "index": "soc-isites",
+            "token": SECURE_SETTINGS.get("splunk_token"),
+            "level": _DEFAULT_LOG_LEVEL,
+            "filters": ["context"],
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+            "filters": ["require_debug_true"],
         },
     },
-    # This is the default logger for any apps or libraries that use the logger
-    # package, but are not represented in the `loggers` dict below.  A level
-    # must be set and handlers defined.  Setting this logger is equivalent to
-    # setting and empty string logger in the loggers dict below, but the separation
-    # here is a bit more explicit.  See link for more details:
-    # https://docs.python.org/2.7/library/logging.config.html#dictionary-schema-details
-    'root': {
-        'level': logging.WARNING,
-        'handlers': ['default'],
-    },
-    'loggers': {
-        # Add app specific loggers here, should look something like this:
-        # '{{ app_name }}': {
-        #    'level': _DEFAULT_LOG_LEVEL,
-        #    'handlers': ['default'],
-        #    'propagate': False,
-        # },
-        # Make sure that propagate is False so that the root logger doesn't get involved
-        # after an app logger handles a log message.
+    "loggers": {
+        "root": {
+            "handlers": ["default", "console"],
+            "level": "WARNING",
+            "propagate": True,
+        },
+        "django": {
+            "handlers": ["default", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["default", "console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "{{ project_name }}": {
+            "handlers": ["default", "console"],
+            "level": _DEFAULT_LOG_LEVEL,
+            "propagate": False,
+        },
     },
 }
-
 # Other project specific settings
